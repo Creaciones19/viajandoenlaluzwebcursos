@@ -98,31 +98,75 @@ footer{background:#f1ded8aa;backdrop-filter:blur(18px)}.float{position:fixed;rig
 
 <style id="gallery-modal-css">
 
-.media-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+/* GALERÍA: añade tantas tarjetas como necesites en GALERIA_CONTENIDO. */
 
-.media-card{position:relative;height:260px;padding:0;overflow:hidden;border-radius:26px;border:1px solid rgba(255,255,255,.82);background:rgba(255,255,255,.18);backdrop-filter:blur(7px);box-shadow:0 22px 55px rgba(117,73,90,.13);cursor:pointer;transition:.3s;transform-style:preserve-3d}
+#galeria { scroll-margin-top: 120px; }
 
-.media-card:hover{transform:translateY(-8px) scale(1.015);box-shadow:0 30px 70px rgba(117,73,90,.20)}
+.gallery-top { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
 
-.media-card img,.media-card video{width:100%;height:100%;object-fit:cover;display:block}
+.gallery-top h2 { margin: 6px 0 10px; font-size: clamp(34px, 5vw, 48px); }
 
-.media-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,rgba(83,48,61,.58))}
+.gallery-top p { margin: 0; line-height: 1.6; }
 
-.media-card span{position:absolute;z-index:2;left:18px;bottom:16px;color:white;font-weight:700}
+.gallery-carousel { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; align-items: center; gap: 12px; }
 
-.video-thumb{height:100%;display:grid;place-items:center;font-size:58px;color:white;background:radial-gradient(circle,rgba(213,155,171,.55),rgba(117,73,90,.28));text-shadow:0 8px 30px rgba(0,0,0,.25)}
+.gallery-carousel > .gallery-arrow { align-self: center; margin-top: -75px; box-shadow: 0 5px 18px #75495a25; }
 
-.media-modal{position:fixed;z-index:9999;inset:0;display:none;align-items:center;justify-content:center;padding:5vw;background:rgba(47,31,38,.74);backdrop-filter:blur(10px)}
+.gallery-track { min-width: 0; }
 
-.media-modal.open{display:flex}.modal-box{width:min(1100px,92vw);max-height:84vh;display:flex;justify-content:center}
+.gallery-arrow { width: 48px; height: 48px; border-radius: 50%; border: 1px solid #b98499; background: #fff8f0e6; color: #873858; font-size: 28px; cursor: pointer; }
 
-.modal-box img,.modal-box video{max-width:100%;max-height:84vh;object-fit:contain;border-radius:20px;box-shadow:0 30px 100px rgba(0,0,0,.35)}
+.gallery-arrow:disabled { opacity: .3; cursor: default; }
 
-.modal-box iframe{width:min(1100px,92vw);height:min(72vh,680px);border:0;border-radius:20px;background:#000}
+.gallery-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 8px 3px 24px; scrollbar-color: #b98499 #eadbdc; scrollbar-width: thin; }
 
-.modal-close{position:absolute;right:28px;top:22px;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.18);color:white;font-size:32px;cursor:pointer}
+.media-card { flex: 0 0 calc((100% - 40px) / 3); min-width: 0; scroll-snap-align: start; display: flex; flex-direction: column; padding: 0; text-align: left; overflow: hidden; border-radius: 24px; border: 1px solid #fff; background: #fff8f0d9; color: #654957; cursor: pointer; box-shadow: 0 12px 30px #75495a15; }
 
-@media(max-width:900px){.media-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.media-grid{grid-template-columns:1fr}.media-card{height:230px}}
+.media-visual { position: relative; aspect-ratio: 9 / 13; width: 100%; background: linear-gradient(135deg,#e6c6d1,#9b6f80); display: grid; place-items: center; overflow: hidden; }
+
+.media-visual img,.media-visual video { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.media-play { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+
+.media-play b { color: white; background: #54313dc9; border: 1px solid #fff9; border-radius: 50%; width: 62px; height: 62px; display: grid; place-items: center; font-size: 25px; padding-left: 4px; }
+
+.media-copy { padding: 18px; display: block; }
+
+.media-copy strong { display: block; font-size: 17px; color: #873858; }
+
+.media-copy small { display: block; margin-top: 7px; color: #705c64; }
+
+.media-fallback { padding: 28px; color: #fff; text-align: center; line-height: 1.6; }
+
+.gallery-status { margin-top: 12px; font-size: 14px; }
+
+.media-card:focus-visible,.gallery-arrow:focus-visible,.modal-control:focus-visible { outline: 3px solid #a83f6a; outline-offset: 4px; }
+
+.media-modal { position: fixed; inset: 0; z-index: 9999; background: #21151ef2; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 70px 65px 55px; }
+
+.media-modal[hidden] { display: none; }
+
+.modal-box { width: 100%; height: 100%; min-height: 0; display: flex; align-items: center; justify-content: center; }
+
+.modal-box img,.modal-box video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; }
+
+.modal-box iframe { width: min(100%,1000px); height: 100%; max-height: 650px; border: 0; background: #000; }
+
+.modal-control { position: absolute; background: #fff2; border: 1px solid #fff8; color: #fff; width: 44px; height: 44px; border-radius: 50%; font-size: 28px; cursor: pointer; }
+
+.modal-close { top: 16px; right: 20px; }
+
+.modal-prev { left: 10px; top: 48%; }
+
+.modal-next { right: 10px; top: 48%; }
+
+.modal-caption { position: absolute; bottom: 10px; left: 60px; right: 60px; color: white; text-align: center; font-size: 14px; }
+
+@media(max-width:900px) { .media-card { flex-basis: calc((100% - 20px) / 2); } }
+
+@media(max-width:520px) { .gallery-carousel { grid-template-columns: 34px minmax(0,1fr) 34px; gap: 5px; } .gallery-carousel > .gallery-arrow { width: 34px; height: 42px; font-size: 27px; } .gallery-top { align-items: center; } .gallery-track { gap: 14px; } .media-card { flex-basis: 88%; } .gallery-arrow { width: 40px; height: 40px; } .media-modal { padding: 70px 48px 65px; } }
+
+@media(prefers-reduced-motion:reduce) { .gallery-track { scroll-behavior: auto; } }
 
 </style>
 
@@ -492,6 +536,53 @@ details p{font-weight:600;color:#5b3f4c;opacity:1}
 
 </style>
 
+<style id="talleres-css">
+
+#pago { scroll-margin-top: 125px; }
+
+.training-intro { line-height: 1.7; margin-bottom: 22px; }
+
+.training-carousel { display: grid; grid-template-columns: 48px minmax(0,1fr) 48px; gap: 12px; align-items: center; }
+
+.training-track { display: flex; gap: 20px; min-width: 0; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 5px 2px 20px; scrollbar-width: thin; scrollbar-color: #b98499 #eadbdc; }
+
+.training-card { flex: 0 0 calc((100% - 40px)/3); min-width: 0; scroll-snap-align: start; display: flex; flex-direction: column; border: 1px solid #fff; border-radius: 22px; overflow: hidden; background: #fff8f0df; box-shadow: 0 10px 25px #75495a14; }
+
+.training-cover { position: relative; min-height: 0; aspect-ratio: 9 / 16; background: #e9d6d9; display: grid; place-items: center; overflow: hidden; }
+
+.training-cover.has-video { aspect-ratio: 9 / 16; }
+.training-cover video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; min-height: 0; object-fit: contain; background: #30262a; }
+
+.training-cover [hidden] { display: none; }
+
+.training-cover p { margin: 0; padding: 18px; text-align: center; font-size: 16px; line-height: 1.5; color: #873858; }
+
+.training-content { display: flex; flex-direction: column; flex: 1; padding: 20px; }
+
+.training-content h3 { font-size: 29px; margin: 7px 0 12px; line-height: 1.1; }
+
+.training-description { font-size: 14px; line-height: 1.65; margin: 0 0 14px; }
+
+.training-details { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: auto 0 18px; padding-top: 12px; border-top: 1px solid #dfbecb; }
+
+.training-details dt { font-size: 12px; }
+
+.training-details dd { margin: 4px 0 0; font-size: 21px; font-weight: 800; color: #873858; }
+
+.training-buy { display: block; text-align: center; font-size: 13px; padding: 12px 10px; }
+
+.training-pending { margin-top: auto; font-size: 13px; color: #806774; padding-top: 16px; }
+
+.training-status { margin: 10px 0 0; font-size: 13px; }
+
+@media(max-width:1000px) { .training-card { flex-basis: calc((100% - 20px)/2); } }
+
+@media(max-width:600px) { .training-carousel { grid-template-columns: 34px minmax(0,1fr) 34px; gap: 5px; } .training-carousel > .gallery-arrow { width: 34px; height: 42px; } .training-card { flex-basis: 100%; } .training-content h3 { font-size: 27px; } }
+
+@media(prefers-reduced-motion:reduce) { .training-track { scroll-behavior: auto; } }
+
+</style>
+
 </head>
 
 <body><div id="loto-fondo"><video id="loto-video" src="flor-loto-fondo.mp4" autoplay muted loop playsinline preload="metadata"></video><i class="brillo" style="left:15%;top:22%"></i><i class="brillo" style="left:32%;top:70%;animation-delay:1s"></i><i class="brillo" style="left:55%;top:28%;animation-delay:2s"></i><i class="brillo" style="left:78%;top:62%;animation-delay:.7s"></i><i class="brillo" style="left:88%;top:18%;animation-delay:1.8s"></i></div>
@@ -506,7 +597,7 @@ details p{font-weight:600;color:#5b3f4c;opacity:1}
 
        target="_blank" rel="noopener">Agendar por WhatsApp</a>
 
-    <a class="btn gold" href="#pago">Pagar</a>
+    <a class="btn gold" href="#pago">Talleres y cursos</a>
 
   </div>
 
@@ -534,7 +625,7 @@ details p{font-weight:600;color:#5b3f4c;opacity:1}
 
   <a href="#contacto">Contacto</a>
 
-  <a class="cta" href="#pago">Pagar</a>
+  <a class="cta" href="#pago">Talleres y cursos</a>
 
 </nav>
 
@@ -559,11 +650,15 @@ details p{font-weight:600;color:#5b3f4c;opacity:1}
           <span class="title-line">Terapia Transgeneracional</span>
 
           <span class="title-line marker">Constelaciones Familiares</span>
+
           <span class="title-line marker">Constelaciones Familiares Cuánticas</span>
 
-          <span class="title-line marker">Yaciente</span>
+          <span class="title-line marker">Movimiento Interrumpido</span>
+
+           <span class="title-line marker">Yaciente</span>
 
           <span class="title-line marker">Síndrome de Aniversario</span>
+
           <span class="title-line marker">Silla Vacía</span>
 
         </h1>
@@ -618,7 +713,7 @@ details p{font-weight:600;color:#5b3f4c;opacity:1}
 
 </div>
 
--->
+\\-->
 
 <div class="video-wrap">
 
@@ -914,55 +1009,47 @@ details p{font-weight:600;color:#5b3f4c;opacity:1}
 
   <div class="container">
 
-    <div class="section-kicker">Galería</div>
+    <div class="gallery-top">
 
-    <h2 class="section-title">Información importante</h2>
+      <div>
 
-    <div class="media-grid">
+        <div class="section-kicker">Galería</div>
 
-      <button class="media-card" data-type="image" data-src="Diseño sin título (8).jpg">
+        <h2 class="section-title">Información importante</h2>
 
-        <img src="Diseño sin título (8).jpg" alt="Sesión individual">
+        <p>Videos, imágenes y novedades. Desliza para descubrir más.</p>
 
-        <span>Ver imagen</span>
-
-      </button>
-
-      <button class="media-card" data-type="image" data-src="imagentran.png">
-
-        <img src="imagentran.png" alt="Constelaciones Familiares Cuánticas">
-
-        <span>Ver imagen</span>
-
-      </button>
-
-      <button class="media-card video-card" data-type="video" data-src="Diseño sin título (81).mp4">
-
-        <video src="Diseño sin título (81).mp4" muted playsinline preload="metadata"></video>
-
-        <span>Ver video</span>
-
-      </button>
-
-      <button class="media-card video-card" data-type="youtube" data-src="https://www.youtube.com/embed/83Kjpau5z1c?start=79&rel=0&modestbranding=1">
-
-        <div class="video-thumb">▶</div>
-
-        <span>Ver video</span>
-
-      </button>
+      </div>
 
     </div>
+
+    <div class="gallery-carousel">
+
+      <button class="gallery-arrow" id="galleryPrev" type="button" aria-label="Ver contenido anterior" aria-controls="galleryTrack">‹</button>
+
+      <div class="gallery-track" id="galleryTrack" role="region" aria-label="Videos, fotografías y anuncios" tabindex="0"></div>
+
+      <button class="gallery-arrow" id="galleryNext" type="button" aria-label="Ver más contenido" aria-controls="galleryTrack">›</button>
+
+    </div>
+
+    <div class="gallery-status" id="galleryStatus" aria-live="polite"></div>
 
   </div>
 
 </section>
 
-<div class="media-modal" id="mediaModal" aria-hidden="true">
+<div class="media-modal" id="mediaModal" role="dialog" aria-modal="true" aria-labelledby="modalCaption" hidden>
 
-  <button class="modal-close" id="modalClose" aria-label="Cerrar">×</button>
+  <button class="modal-control modal-close" id="modalClose" type="button" aria-label="Cerrar visor">×</button>
+
+  <button class="modal-control modal-prev" id="modalPrev" type="button" aria-label="Contenido anterior">‹</button>
 
   <div class="modal-box" id="modalBox"></div>
+
+  <button class="modal-control modal-next" id="modalNext" type="button" aria-label="Contenido siguiente">›</button>
+
+  <div class="modal-caption" id="modalCaption"></div>
 
 </div>
 
@@ -1048,33 +1135,31 @@ details p{font-weight:600;color:#5b3f4c;opacity:1}
 
 </section>
 
-  <section id="pago">
+<section id="pago">
 
-    <div class="container">
+  <div class="container">
 
-      <div class="section-kicker">Pago</div>
+    <div class="section-kicker">Formación</div>
 
-      <h2 class="section-title">Reserva tu lugar</h2>
+    <h2 class="section-title">Compra de talleres, diplomados y cursos</h2>
 
-      <div class="card" style="display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap">
+    <p class="training-intro">Explora las opciones. Desliza o utiliza las flechas para ver más.</p>
 
-        <div>
+    <div class="training-carousel">
 
-          <p style="margin:.2rem 0; color:var(--muted)">Paga tu sesión o taller con un link de pago.</p>
+      <button class="gallery-arrow" id="trainingPrev" type="button" aria-label="Ver cursos anteriores" aria-controls="trainingTrack">‹</button>
 
-          <p class="badge">Link oficial</p>
+      <div class="training-track" id="trainingTrack" role="region" aria-label="Talleres, diplomados y cursos" tabindex="0"></div>
 
-        </div>
-
-        <!-- Pon aquí tu link real -->
-
-        <a class="btn gold" href="#" target="_blank" rel="noopener">Pagar</a>
-
-      </div>
+      <button class="gallery-arrow" id="trainingNext" type="button" aria-label="Ver más cursos" aria-controls="trainingTrack">›</button>
 
     </div>
 
-  </section>
+    <p class="training-status" id="trainingStatus" aria-live="polite"></p>
+
+  </div>
+
+</section>
 
   <section id="contacto">
 
@@ -1202,27 +1287,301 @@ document.getElementById('y')&&(document.getElementById('y').textContent=new Date
 
 <script id="gallery-modal-js">
 
-(()=>{const m=document.getElementById('mediaModal'),box=document.getElementById('modalBox'),close=document.getElementById('modalClose');
+(() => {
 
-if(!m)return;
+  /* EDITA AQUÍ LA GALERÍA. No hay límite de 15 elementos.
 
-function shut(){m.classList.remove('open');m.setAttribute('aria-hidden','true');box.innerHTML='';document.body.style.overflow=''}
+     Los archivos deben estar junto a este HTML, o indicar su carpeta en src.
 
-document.querySelectorAll('.media-card').forEach(c=>c.addEventListener('click',()=>{
+     Para añadir un video: { tipo: 'video', titulo: 'Título', src: 'archivo.mp4' },
 
- const type=c.dataset.type,src=c.dataset.src;box.innerHTML='';
+     Para añadir una foto o anuncio: { tipo: 'image', titulo: 'Título', src: 'foto.jpg' },
 
- if(type==='image')box.innerHTML=`<img src="${src}" alt="">`;
+     Opcional: portada: 'imagen.jpg' para personalizar la miniatura de un video.
 
- if(type==='video')box.innerHTML=`<video src="${src}" controls autoplay playsinline></video>`;
+     El nombre constelacionescuaticas.mp4 coincide con tu archivo original.
 
- if(type==='youtube')box.innerHTML=`<iframe src="${src}&autoplay=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+  */
 
- m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+  const GALERIA_CONTENIDO = [
+    { tipo: 'video', titulo: ' transgeneracional', src: 'transgeneracional.mp4' },
 
-}));
+    { tipo: 'video', titulo: 'Constelaciones familiares', src: 'constelaciones familiares.mp4' },
 
-close.addEventListener('click',shut);m.addEventListener('click',e=>{if(e.target===m)shut()});addEventListener('keydown',e=>{if(e.key==='Escape')shut()});
+    { tipo: 'video', titulo: 'Constelaciones familiares cuánticas', src: 'constelacionescuaticas.mp4' },
+
+    { tipo: 'video', titulo: 'Síndrome de aniversario', src: 'sindrome de aniversario.mp4' },
+
+    { tipo: 'video', titulo: 'Silla vacía', src: 'silla vacia.mp4' },
+    { tipo: 'video', titulo: 'Silla madre', src: 'sillamadre.mp4' },
+    { tipo: 'video', titulo: 'Yaciente final', src: 'yacentefinal.mp4' },
+
+
+  ];
+
+  const track = document.getElementById('galleryTrack');
+
+  if (!track) return;
+
+  const prev = document.getElementById('galleryPrev');
+
+  const next = document.getElementById('galleryNext');
+
+  const status = document.getElementById('galleryStatus');
+
+  const modal = document.getElementById('mediaModal');
+
+  const box = document.getElementById('modalBox');
+
+  const close = document.getElementById('modalClose');
+
+  const caption = document.getElementById('modalCaption');
+
+  let active = 0, returnFocus = null, previousOverflow = '';
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function fallback(parent, message) {
+
+    parent.replaceChildren();
+
+    const text = document.createElement('div');
+
+    text.className = 'media-fallback';
+
+    text.textContent = message;
+
+    parent.append(text);
+
+  }
+
+  GALERIA_CONTENIDO.forEach((item, index) => {
+
+    const card = document.createElement('button');
+
+    card.type = 'button';
+
+    card.className = 'media-card';
+
+    card.setAttribute('aria-label', 'Abrir ' + item.titulo);
+
+    const visual = document.createElement('div');
+
+    visual.className = 'media-visual';
+
+    let media;
+
+    if (item.tipo === 'image' || item.portada || item.tipo === 'youtube') {
+
+      media = document.createElement('img');
+
+      media.src = item.portada || (item.tipo === 'youtube' ? 'https://i.ytimg.com/vi/83Kjpau5z1c/hqdefault.jpg' : item.src);
+
+      media.alt = item.titulo;
+
+      media.loading = 'lazy';
+
+    } else {
+
+      media = document.createElement('video');
+
+      media.src = item.src + '#t=0.1';
+
+      media.muted = true;
+
+      media.playsInline = true;
+
+      media.preload = 'none';
+
+      media.setAttribute('aria-hidden', 'true');
+
+    }
+
+    media.addEventListener('error', () => fallback(visual, item.titulo + ' · Abre para reproducir o ver el contenido.'), { once: true });
+
+    visual.append(media);
+
+    if (item.tipo !== 'image') {
+
+      const play = document.createElement('div');
+
+      play.className = 'media-play';
+
+      play.setAttribute('aria-hidden', 'true');
+
+      const icon = document.createElement('b'); icon.textContent = '▶';
+
+      play.append(icon); visual.append(play);
+
+    }
+
+    const copy = document.createElement('span'); copy.className = 'media-copy';
+
+    const title = document.createElement('strong'); title.textContent = item.titulo;
+
+    const kind = document.createElement('small'); kind.textContent = item.tipo === 'image' ? 'Ver imagen' : 'Reproducir video';
+
+    copy.append(title, kind); card.append(visual, copy); track.append(card);
+
+    card.addEventListener('click', () => open(index, card));
+
+  });
+
+  /* Carga las miniaturas de video solo cuando se acercan a la zona visible. */
+
+  const thumbs = track.querySelectorAll('video');
+
+  if ('IntersectionObserver' in window) {
+
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+
+      if (entry.isIntersecting) { entry.target.preload = 'metadata'; entry.target.load(); observer.unobserve(entry.target); }
+
+    }), { root: track, rootMargin: '0px 300px' });
+
+    thumbs.forEach(video => observer.observe(video));
+
+  } else thumbs.forEach(video => { video.preload = 'metadata'; });
+
+  function update() {
+
+    prev.disabled = track.scrollLeft < 4;
+
+    next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+
+    status.textContent = GALERIA_CONTENIDO.length + ' contenidos · Toca una tarjeta para abrirla';
+
+  }
+
+  function move(direction) {
+
+    const card = track.firstElementChild;
+
+    if (card) track.scrollBy({ left: direction * (card.getBoundingClientRect().width + parseFloat(getComputedStyle(track).gap)), behavior: reduced ? 'instant' : 'smooth' });
+
+  }
+
+  prev.addEventListener('click', () => move(-1));
+
+  next.addEventListener('click', () => move(1));
+
+  track.addEventListener('scroll', update, { passive: true });
+
+  track.addEventListener('keydown', event => {
+
+    if (event.target !== track) return;
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); move(event.key === 'ArrowRight' ? 1 : -1); }
+
+  });
+
+  window.addEventListener('resize', update);
+
+  function clear() {
+
+    box.querySelectorAll('video').forEach(video => { video.pause(); video.removeAttribute('src'); video.load(); });
+
+    box.replaceChildren();
+
+  }
+
+  function show(index) {
+
+    active = (index + GALERIA_CONTENIDO.length) % GALERIA_CONTENIDO.length;
+
+    clear();
+
+    const item = GALERIA_CONTENIDO[active];
+
+    let media;
+
+    if (item.tipo === 'image') {
+
+      media = document.createElement('img'); media.alt = item.titulo;
+
+    } else if (item.tipo === 'video') {
+
+      media = document.createElement('video'); media.controls = true; media.autoplay = true; media.playsInline = true; media.preload = 'metadata';
+
+    } else {
+
+      media = document.createElement('iframe'); media.title = item.titulo;
+
+      media.allow = 'autoplay; encrypted-media; picture-in-picture'; media.allowFullscreen = true;
+
+    }
+
+    media.src = item.src + (item.tipo === 'youtube' ? '&autoplay=1' : '');
+
+    media.addEventListener('error', () => fallback(box, 'No se pudo cargar este archivo. Comprueba su nombre y que esté en la carpeta del proyecto.'), { once: true });
+
+    box.append(media);
+
+    caption.textContent = (active + 1) + ' / ' + GALERIA_CONTENIDO.length + ' — ' + item.titulo;
+
+  }
+
+  function open(index, trigger) {
+
+    returnFocus = trigger;
+
+    previousOverflow = document.body.style.overflow;
+
+    modal.hidden = false;
+
+    document.body.style.overflow = 'hidden';
+
+    show(index); close.focus();
+
+  }
+
+  function shut() {
+
+    clear(); modal.hidden = true;
+
+    document.body.style.overflow = previousOverflow;
+
+    if (returnFocus) returnFocus.focus({ preventScroll: true });
+
+  }
+
+  close.addEventListener('click', shut);
+
+  document.getElementById('modalPrev').addEventListener('click', () => show(active - 1));
+
+  document.getElementById('modalNext').addEventListener('click', () => show(active + 1));
+
+  modal.addEventListener('click', event => { if (event.target === modal || event.target === box) shut(); });
+
+  document.addEventListener('keydown', event => {
+
+    if (modal.hidden) return;
+
+    if (event.key === 'Escape') shut();
+
+    if (event.target.tagName !== 'VIDEO' && event.target.tagName !== 'IFRAME') {
+
+      if (event.key === 'ArrowLeft') { event.preventDefault(); show(active - 1); }
+
+      if (event.key === 'ArrowRight') { event.preventDefault(); show(active + 1); }
+
+    }
+
+    if (event.key === 'Tab') {
+
+      const focusable = [...modal.querySelectorAll('button, video[controls], iframe')];
+
+      const first = focusable[0], last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+
+    }
+
+  });
+
+  update();
 
 })();
 
@@ -1247,6 +1606,150 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
 
 });
+
+</script>
+
+<script id="taller-video-js">
+
+(() => {
+
+  /* AGREGA MÁS OPCIONES AQUÍ. Duplica un objeto con estos campos:
+
+     { tipo: 'Taller', titulo: 'Nombre', descripcion: 'De qué trata',
+
+       video: 'archivo.mp4', duracion: '5 horas', precio: '$560 MXN' }
+
+     El botón prepara automáticamente el mensaje de compra con ese título.
+
+     Para reemplazar un espacio pendiente, quita pendiente:true y añade sus datos.
+
+  */
+
+  const FORMACION = [
+
+    {
+
+      tipo: 'Taller', titulo: 'Los Órdenes del Amor',
+
+      descripcion: 'Pertenencia, jerarquía y equilibrio entre dar y recibir. Explicaciones y ejercicios de reflexión para explorar nuestros vínculos familiares.',
+
+      video: 'videopromocinaoordenes.mp4', duracion: '5 horas', precio: '$560 MXN'
+
+    },
+
+    { tipo: 'Talleres', titulo: 'Próximamente', descripcion: 'Aquí encontrarás nuevos talleres y sus contenidos cuando estén disponibles.', pendiente: true },
+
+    { tipo: 'Cursos y diplomados', titulo: 'Próximamente', descripcion: 'Conoce aquí las siguientes opciones de formación cuando estén disponibles.', pendiente: true }
+
+  ];
+
+  const track = document.getElementById('trainingTrack');
+
+  const prev = document.getElementById('trainingPrev');
+
+  const next = document.getElementById('trainingNext');
+
+  const status = document.getElementById('trainingStatus');
+
+  function node(tag, cls, text) {
+
+    const el = document.createElement(tag); el.className = cls;
+
+    if (text) el.textContent = text; return el;
+
+  }
+
+  FORMACION.forEach(item => {
+
+    const card = node('article', 'training-card');
+
+    const cover = node('div', 'training-cover');
+
+    const note = node('p', '', item.pendiente ? 'Nueva formación próximamente' : 'Video de presentación próximamente');
+
+    if (item.video) {
+      cover.classList.add('has-video');
+
+      const video = node('video', ''); video.controls = true; video.playsInline = true; video.preload = 'metadata'; video.src = item.video;
+
+
+      video.setAttribute('aria-label', 'Presentación de ' + item.titulo);
+
+      note.hidden = true;
+
+      video.addEventListener('error', () => { video.hidden = true; note.hidden = false; });
+
+      video.addEventListener('play', () => document.querySelectorAll('#pago video').forEach(other => { if (other !== video) other.pause(); }));
+
+      cover.append(video);
+
+    }
+
+    cover.append(note);
+
+    const content = node('div', 'training-content');
+
+    content.append(node('div', 'section-kicker', item.tipo), node('h3', '', item.titulo), node('p', 'training-description', item.descripcion));
+
+    if (!item.pendiente) {
+
+      const details = node('dl', 'training-details');
+
+      [['Duración', item.duracion], ['Precio', item.precio]].forEach(([label,value]) => {
+
+        const group = node('div', ''); group.append(node('dt','',label),node('dd','',value)); details.append(group);
+
+      });
+
+      const buy = node('a', 'btn primary training-buy', 'Comprar');
+
+      buy.href = 'https://wa.me/523343340062?text=' + encodeURIComponent('Hola, deseo adquirir el ' + item.tipo.toLowerCase() + ' de ' + item.titulo + '. ¿Me compartes los pasos para realizar mi compra?');
+
+      buy.target = '_blank'; buy.rel = 'noopener'; content.append(details,buy);
+
+    } else content.append(node('p','training-pending','Información disponible próximamente'));
+
+    card.append(cover,content); track.append(card);
+
+  });
+
+  function update() {
+
+    prev.disabled = track.scrollLeft < 4;
+
+    next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+
+    const cards = [...track.children];
+
+    const first = cards.findIndex(card => card.getBoundingClientRect().right > track.getBoundingClientRect().left + 8);
+
+    const visible = Math.max(1, Math.round(track.clientWidth / (cards[0].offsetWidth + 20)));
+
+    status.textContent = 'Mostrando ' + (Math.max(0,first)+1) + '–' + Math.min(cards.length,Math.max(0,first)+visible) + ' de ' + cards.length;
+
+  }
+
+  function move(direction) {
+
+    const width = track.firstElementChild.getBoundingClientRect().width + 20;
+
+    track.scrollBy({left: direction * width, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+
+  }
+
+  prev.addEventListener('click', () => move(-1)); next.addEventListener('click', () => move(1));
+
+  track.addEventListener('scroll',update,{passive:true}); window.addEventListener('resize',update);
+
+  track.addEventListener('keydown', event => {
+
+    if (event.target === track && ['ArrowLeft','ArrowRight'].includes(event.key)) { event.preventDefault(); move(event.key === 'ArrowRight' ? 1 : -1); }
+
+  });
+
+  requestAnimationFrame(update);
+
+})();
 
 </script>
 
