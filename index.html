@@ -550,7 +550,10 @@ details p{font-weight:600;color:#5b3f4c;opacity:1}
 
 .training-cover { position: relative; min-height: 0; aspect-ratio: 9 / 16; background: #e9d6d9; display: grid; place-items: center; overflow: hidden; }
 
+.training-cover img { display: block; width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+
 .training-cover.has-video { aspect-ratio: 9 / 16; }
+
 .training-cover video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; min-height: 0; object-fit: contain; background: #30262a; }
 
 .training-cover [hidden] { display: none; }
@@ -713,7 +716,7 @@ details p{font-weight:600;color:#5b3f4c;opacity:1}
 
 </div>
 
-\\-->
+\\\-->
 
 <div class="video-wrap">
 
@@ -1209,7 +1212,7 @@ details p{font-weight:600;color:#5b3f4c;opacity:1}
 
             <!-- Pega aquí tus links reales -->
 
-            <a class="btn secondary" href="https://www.youtube.com/watch?v=83Kjpau5z1c" target="_blank" rel="noopener">YouTube</a>
+            <a class="btn secondary" href="https://www.youtube.com/@gpemlviajandoenlaluz352" target="_blank" rel="noopener">YouTube</a>
 
           </div>
 
@@ -1304,6 +1307,7 @@ document.getElementById('y')&&(document.getElementById('y').textContent=new Date
   */
 
   const GALERIA_CONTENIDO = [
+
     { tipo: 'video', titulo: ' transgeneracional', src: 'transgeneracional.mp4' },
 
     { tipo: 'video', titulo: 'Constelaciones familiares', src: 'constelaciones familiares.mp4' },
@@ -1313,9 +1317,10 @@ document.getElementById('y')&&(document.getElementById('y').textContent=new Date
     { tipo: 'video', titulo: 'Síndrome de aniversario', src: 'sindrome de aniversario.mp4' },
 
     { tipo: 'video', titulo: 'Silla vacía', src: 'silla vacia.mp4' },
-    { tipo: 'video', titulo: 'Silla madre', src: 'sillamadre.mp4' },
-    { tipo: 'video', titulo: 'Yaciente final', src: 'yacentefinal.mp4' },
 
+    { tipo: 'video', titulo: 'Silla vacía ejercicio', src: 'sillamadre.mp4' },
+
+    { tipo: 'video', titulo: 'Yaciente final', src: 'yacentefinal.mp4' },
 
   ];
 
@@ -1633,13 +1638,13 @@ document.addEventListener('DOMContentLoaded',()=>{
 
       descripcion: 'Pertenencia, jerarquía y equilibrio entre dar y recibir. Explicaciones y ejercicios de reflexión para explorar nuestros vínculos familiares.',
 
-      video: 'videopromocinaoordenes.mp4', duracion: '1.25 minutos', precio: '$550 MXN'
+      video: 'videopromocinaoordenes.mp4', duracion: '1.25 minutos', precio: '$900 MXN'
 
     },
 
-    { tipo: 'Talleres', titulo: 'Próximamente', descripcion: 'Aquí encontrarás nuevos talleres y sus contenidos cuando estén disponibles.', pendiente: true },
+    { tipo: 'Talleres', titulo: 'Próximamente', descripcion: 'Aquí encontrarás nuevos talleres y sus contenidos cuando estén disponibles.', imagen: 'constelacioneverticales.jpg', pendiente: true },
 
-    { tipo: 'Cursos y diplomados', titulo: 'Próximamente', descripcion: 'Conoce aquí las siguientes opciones de formación cuando estén disponibles.', pendiente: true }
+    { tipo: 'Cursos y diplomados', titulo: 'Próximamente', descripcion: 'Conoce aquí las siguientes opciones de formación cuando estén disponibles.', imagen: 'puerta-vertical.png', pendiente: true }
 
   ];
 
@@ -1667,11 +1672,19 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     const note = node('p', '', item.pendiente ? 'Nueva formación próximamente' : 'Video de presentación próximamente');
 
-    if (item.video) {
+    if (item.imagen) {
+      const img = node('img', '');
+      img.src = item.imagen;
+      img.alt = item.tipo === 'Talleres' ? 'Constelaciones familiares: próximos talleres' : 'Puerta iluminada: próximos cursos y diplomados';
+      img.loading = 'lazy';
+      note.hidden = true;
+      img.addEventListener('error', () => { img.hidden = true; note.hidden = false; });
+      cover.append(img);
+    } else if (item.video) {
+
       cover.classList.add('has-video');
 
       const video = node('video', ''); video.controls = true; video.playsInline = true; video.preload = 'metadata'; video.src = item.video;
-
 
       video.setAttribute('aria-label', 'Presentación de ' + item.titulo);
 
